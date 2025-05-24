@@ -3,9 +3,6 @@
 source ./common.sh 
 
 check_root
-app_setup
-nodejs_setup
-systemd_setup
 
 dnf module disable nginx -y  &>>$LOG_FILE
 VALIDATE $? "Disabling default niginx module"
@@ -19,10 +16,10 @@ VALIDATE $? "Installing niginx:1.24 module"
 systemctl enable nginx   &>>$LOG_FILE
 VALIDATE $? "Enabling niginx:1.24 module"
 
-systemctl start nginx 
+systemctl start nginx &>>$LOG_FILE
 VALIDATE $? "Starting niginx:1.24 module"
 
-rm -rf /usr/share/nginx/html/* 
+rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "Removing default niginx connent"
 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip  &>>$LOG_FILE
@@ -35,7 +32,7 @@ VALIDATE $? "unzipping frontend"
 rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "Remove default nginx conf"
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "Copying niginx.conf"
 
 systemctl restart nginx  &>>$LOG_FILE
