@@ -6,7 +6,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
-LOGS_FOLDER="/var/log/roboshop-logs"
+LOGS_FOLDER="/var/log/robohop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 SCRIPT_DIR=$PWD
@@ -54,6 +54,29 @@ systemd_setup()
     systemctl start $app_name 
     VALIDATE $? "staring $app_name service"
 }
+
+maven_setup(){
+    dnf install maven -y &>>$LOG_FILE
+    id roboshop &>>$LOG_FILE
+    
+    mvn clean package &>>$LOG_FILE
+    VALIDATE $? "Pacakaging Dependencies"
+
+    mv target/shipping-1.0.jar shipping.jar 
+    VALIDATE $? "Moving and renaming the jar file"
+
+}
+
+python_setup()
+{
+    dnf install python3 gcc python3-devel -y &>>$LOG_FILE
+    VALIDATE $? "installing the python app"
+
+    cd /app 
+    pip3 install -r requirements.txt &>>$LOG_FILE
+    VALIDATE $? "installing dependencies"
+}
+
 
 nodejs_setup(){
     dnf module disable nodejs -y &>>$LOG_FILE
