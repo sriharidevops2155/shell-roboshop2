@@ -2,7 +2,10 @@
 
 source ./common.sh 
 
-
+check_root
+app_setup
+nodejs_setup
+systemd_setup
 
 dnf module disable nginx -y  &>>$LOG_FILE
 VALIDATE $? "Disabling default niginx module"
@@ -26,7 +29,7 @@ curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v
 VALIDATE $? "Downloading Frontend"
 
 cd /usr/share/nginx/html 
-unzip /tmp/frontend.zip &>>$LOG_FILE  &>>$LOG_FILE
+unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "unzipping frontend"
 
 rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
