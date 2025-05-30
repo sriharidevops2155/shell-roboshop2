@@ -6,21 +6,9 @@ app_name=shipping
 
 check_root
 
-
 app_setup
 maven_setup
 systemd_setup
-
-cp $PWD/shipping.service /etc/systemd/system/shipping.service &>>$LOG_FILE
-
-systemctl daemon-reload &>>$LOG_FILE
-VALIDATE $? "deamon-reload for shipping service"
-
-systemctl enable shipping &>>$LOG_FILE
-VALIDATE $? "enabling shipping service"
-
-systemctl start shipping &>>$LOG_FILE
-VALIDATE $? "staring shipping service"
 
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing my sql"
